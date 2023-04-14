@@ -1,0 +1,58 @@
+import tkinter as tk
+
+# Create the main window
+root = tk.Tk()
+root.title("Embeddable Social Icons")
+
+# Create a dictionary of social media platforms with their URLs and icons
+social_media = {
+    "Facebook": {"url": "", "icon": "facebook.ico"},
+    "Twitter": {"url": "", "icon": "twitter.ico"},
+    "Instagram": {"url": "", "icon": "instagram.ico"},
+    "LinkedIn": {"url": "", "icon": "linkedin.ico"},
+    "Pinterest": {"url": "", "icon": "pinterest.ico"},
+    "Reddit": {"url": "", "icon": "reddit.ico"},
+    "TikTok": {"url": "", "icon": "tiktok.ico"},
+    "GitHub": {"url": "", "icon": "github.ico"}
+}
+
+# Create the checkboxes and entry boxes for the social media platforms
+checkboxes = {}
+entries = {}
+for platform, info in social_media.items():
+    var = tk.IntVar()
+    checkbox = tk.Checkbutton(root, text=platform, variable=var)
+    checkbox.pack(anchor=tk.W)
+    checkboxes[platform] = var
+    entry = tk.Entry(root)
+    entry.pack_forget()
+    entries[platform] = entry
+
+    # Create a function to show/hide the entry box based on the checkbox state
+    def toggle_entry(var, platform=platform):
+        if var.get():
+            entries[platform].pack()
+        else:
+            entries[platform].pack_forget()
+
+    checkbox.config(command=lambda var=var, platform=platform: toggle_entry(var, platform))
+
+# Create the Generate button
+def generate_script():
+    script = ""
+    for platform, info in social_media.items():
+        link = entries[platform].get()
+        if link:
+            script += f"<a href='{link}'><img src='https://{info['icon']}'></a>"
+    text.delete('1.0', tk.END)
+    text.insert(tk.END, script)
+
+generate_button = tk.Button(root, text="Generate", command=generate_script)
+generate_button.pack()
+
+# Create the text area for the script
+text = tk.Text(root)
+text.pack()
+
+# Run the main loop
+root.mainloop()
